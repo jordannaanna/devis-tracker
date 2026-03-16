@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \":*)",
+      "Bash(pip3 install:*)",
+      "Read(//Users/jordan/Desktop/**)",
+      "Bash(python3:*)",
+      "Bash(npm install:*)",
+      "Read(//Users/jordan/.nvm/versions/**)",
+      "Read(//opt/homebrew/**)",
+      "Bash(command -v node)",
+      "Bash(grep -v \"^/Users/jordan/Desktop/appli$\")",
+      "Bash(sw_vers)",
+      "Bash(ls /Users/jordan/Desktop/appli/*.db)",
+      "Bash(ls /Users/jordan/Desktop/appli/prisma/*.db)",
+      "Bash(node_modules/.bin/prisma db:*)",
+      "Bash(/Users/jordan/Desktop/appli/.env:*)",
+      "Bash(node_modules/.bin/tsx prisma/seed.ts)",
+      "Bash(curl -s -X POST http://localhost:3000/api/auth/login -H \"Content-Type: application/json\" -d '{\"\"login\"\":\"\"admin\"\",\"\"password\"\":\"\"admin123\"\"}')"
+    ]
+  }
+}

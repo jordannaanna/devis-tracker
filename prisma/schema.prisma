@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  login     String   @unique
+  password  String
+  nom       String
+  prenom    String
+  role      String   @default("CHARGE_AFFAIRES") // ADMIN | CHARGE_AFFAIRES | DIRECTION
+  actif     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  devis     Devis[]
+}
+
+model Devis {
+  id                 Int       @id @default(autoincrement())
+  intitule           String
+  site               String
+  siteNorm           String    // UPPERCASE pour filtrage insensible à la casse
+  typeOffre          String    // MARCHE | HORS_MARCHE
+  atTem              String    // AT1 | AT2 | AT3 | AT4 | TEM
+  cctp               String
+  cctpNorm           String
+  client             String?
+  createurNom        String
+  createurNorm       String
+  userId             Int?
+  user               User?     @relation(fields: [userId], references: [id])
+  numeroOffre        String
+  dateRemise         DateTime
+  indice             Int       @default(0)
+  nombrePoints       Float?
+  montant            Float     @default(0)
+  rop                Float?    // Décimal brut (ex: 0.06 = 6%)
+  statut             String    @default("EN_ATTENTE")
+  // ENVOYE | EN_ATTENTE | GAGNE | PERDU | COMMANDE_RECUE | EN_COURS | TERMINE | PV_RECU | CLOS
+  numeroCommande     String?
+  dateDebut          DateTime?
+  dateFin            DateTime?
+  numeroPvReception  String?
+  montantReceptionne Float?
+  commentaire        String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+}
+
+model Params {
+  id                   Int   @id @default(1)
+  ropMini              Float @default(0.02)
+  ropCible             Float @default(0.06)
+  seuilCorrectionRop   Float @default(0.5)
+  facteurCorrectionRop Float @default(100)
+  relance1Jours        Int   @default(30)
+  relance2Jours        Int   @default(45)
+}
