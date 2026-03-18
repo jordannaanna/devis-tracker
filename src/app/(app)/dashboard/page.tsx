@@ -102,7 +102,73 @@ export default async function DashboardPage({ searchParams }: { searchParams: Se
         </div>
       </div>
 
-      {/* KPI Row 4 : Relances */}
+      {/* KPI Row 4 : Heures vendues */}
+      <div>
+        <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Heures vendues</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+          <KpiCard label="Total heures vendues" value={`${kpi.totalHeures.toLocaleString('fr-FR')} h`} color="blue" />
+        </div>
+      </div>
+
+      {/* Tableau heures par mois */}
+      <div className="card p-5">
+        <h3 className="section-title mb-4">Heures vendues par mois</h3>
+        {kpi.heuresParMois.filter((m) => m.heures > 0).length === 0 ? (
+          <p className="text-sm text-gray-400">Aucune heure renseignée</p>
+        ) : (
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="table-head">
+                <th className="px-2 py-2 text-left">Mois</th>
+                <th className="px-2 py-2 text-right">Heures vendues</th>
+                <th className="px-2 py-2 text-right">dont Gagnées</th>
+                <th className="px-2 py-2 text-right">% Gagnées</th>
+              </tr>
+            </thead>
+            <tbody>
+              {kpi.heuresParMois.filter((m) => m.heures > 0).map((row) => (
+                <tr key={row.mois} className="table-row">
+                  <td className="table-cell font-medium">{formatMois(row.mois)}</td>
+                  <td className="table-cell text-right font-semibold">{row.heures.toLocaleString('fr-FR')} h</td>
+                  <td className="table-cell text-right text-green-700">{row.heuresGagne.toLocaleString('fr-FR')} h</td>
+                  <td className="table-cell text-right text-gray-500">
+                    {row.heures > 0 ? `${Math.round((row.heuresGagne / row.heures) * 100)} %` : '—'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {/* Heures par site / CCTP / créateur */}
+      {kpi.totalHeures > 0 && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="card p-5">
+            <h3 className="section-title mb-4">Heures par site</h3>
+            <BarChart
+              items={kpi.heuresParSite.map((r) => ({ label: r.site, value: r.heures, color: 'bg-blue-400' }))}
+              formatValue={(v) => `${v.toLocaleString('fr-FR')} h`}
+            />
+          </div>
+          <div className="card p-5">
+            <h3 className="section-title mb-4">Heures par CCTP</h3>
+            <BarChart
+              items={kpi.heuresParCctp.map((r) => ({ label: r.cctp, value: r.heures, color: 'bg-indigo-400' }))}
+              formatValue={(v) => `${v.toLocaleString('fr-FR')} h`}
+            />
+          </div>
+          <div className="card p-5">
+            <h3 className="section-title mb-4">Heures par créateur</h3>
+            <BarChart
+              items={kpi.heuresParCreateur.map((r) => ({ label: r.createur, value: r.heures, color: 'bg-purple-400' }))}
+              formatValue={(v) => `${v.toLocaleString('fr-FR')} h`}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* KPI Row 6 : Relances */}
       <div>
         <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Alertes relances</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">

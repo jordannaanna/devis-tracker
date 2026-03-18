@@ -104,12 +104,15 @@ export function computeKpis(
     };
   }).sort((a, b) => b.montantGagne - a.montantGagne);
 
+  // Totaux heures
+  const totalHeures = devis.reduce((s, d) => s + (d.nombreHeures ?? 0), 0);
+
   // Breakdown par mois
-  const moisMap = new Map<string, { nbOffres: number; montant: number; montantGagne: number; margePot: number }>();
+  const moisMap = new Map<string, { nbOffres: number; montant: number; montantGagne: number; margePot: number; heures: number }>();
   devis.forEach((d) => {
     const date = new Date(d.dateRemise);
     const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-    const existing = moisMap.get(key) ?? { nbOffres: 0, montant: 0, montantGagne: 0, margePot: 0 };
+    const existing = moisMap.get(key) ?? { nbOffres: 0, montant: 0, montantGagne: 0, margePot: 0, heures: 0 };
     const rc = calcRopCorr(d.rop, seuilRop, facteurRop);
     const mp = calcMargePot(d.montant, rc) ?? 0;
     moisMap.set(key, {
@@ -117,11 +120,42 @@ export function computeKpis(
       montant: existing.montant + d.montant,
       montantGagne: existing.montantGagne + (d.statut === 'GAGNE' ? d.montant : 0),
       margePot: existing.margePot + mp,
+      heures: existing.heures + (d.nombreHeures ?? 0),
     });
   });
   const parMois = [...moisMap.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([mois, vals]) => ({ mois, ...vals }));
+
+  // Heures par mois (avec heures gagnées)
+  const heuresParMois = parMois.map((m) => ({
+    mois: m.mois,
+    heures: m.heures,
+    heuresGagne: devis
+      .filter((d) => {
+        const date = new Date(d.dateRemise);
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}` === m.mois && d.statut === 'GAGNE';
+      })
+      .reduce((s, d) => s + (d.nombreHeures ?? 0), 0),
+  }));
+
+  // Heures par site
+  const heuresParSite = sitesUniques.map((site) => ({
+    site: devis.find((d) => d.siteNorm === site)?.site ?? site,
+    heures: devis.filter((d) => d.siteNorm === site).reduce((s, d) => s + (d.nombreHeures ?? 0), 0),
+  })).filter((r) => r.heures > 0).sort((a, b) => b.heures - a.heures);
+
+  // Heures par CCTP
+  const heuresParCctp = cctpsUniques.map((cctp) => ({
+    cctp: devis.find((d) => d.cctpNorm === cctp)?.cctp ?? cctp,
+    heures: devis.filter((d) => d.cctpNorm === cctp).reduce((s, d) => s + (d.nombreHeures ?? 0), 0),
+  })).filter((r) => r.heures > 0).sort((a, b) => b.heures - a.heures);
+
+  // Heures par créateur
+  const heuresParCreateur = createursUniques.map((c) => ({
+    createur: c,
+    heures: devis.filter((d) => d.createurNom === c).reduce((s, d) => s + (d.nombreHeures ?? 0), 0),
+  })).filter((r) => r.heures > 0).sort((a, b) => b.heures - a.heures);
 
   return {
     nbOffres: devis.length,
@@ -147,9 +181,14 @@ export function computeKpis(
     resteAFaireTotal,
     ropMoyen,
     margePotConsolidee,
+    totalHeures,
     parSite,
     parCctp,
     parCreateur,
     parMois,
+    heuresParMois,
+    heuresParSite,
+    heuresParCctp,
+    heuresParCreateur,
   };
 }

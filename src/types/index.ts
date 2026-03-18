@@ -50,6 +50,7 @@ export interface DevisRow {
   dateFin: string | null;
   numeroPvReception: string | null;
   montantReceptionne: number | null;
+  nombreHeures: number | null;
   commentaire: string | null;
   createdAt: string;
   updatedAt: string;
@@ -88,7 +89,12 @@ export interface KpiData {
   parSite: Array<{ site: string; nbOffres: number; nbGagne: number; nbPerdu: number; nbEnAttente: number; montant: number; montantGagne: number }>;
   parCctp: Array<{ cctp: string; nbOffres: number; nbGagne: number; montantGagne: number; ropMoyen: number }>;
   parCreateur: Array<{ createur: string; nbOffres: number; nbGagne: number; montantGagne: number }>;
-  parMois: Array<{ mois: string; nbOffres: number; montant: number; montantGagne: number; margePot: number }>;
+  parMois: Array<{ mois: string; nbOffres: number; montant: number; montantGagne: number; margePot: number; heures: number }>;
+  totalHeures: number;
+  heuresParMois: Array<{ mois: string; heures: number; heuresGagne: number }>;
+  heuresParSite: Array<{ site: string; heures: number }>;
+  heuresParCctp: Array<{ cctp: string; heures: number }>;
+  heuresParCreateur: Array<{ createur: string; heures: number }>;
 }
 
 export interface FiltresDevis {

@@ -53,8 +53,8 @@ export async function GET(request: NextRequest) {
   const header = [
     'N° Offre', 'Intitulé', 'Site', 'Type', 'AT/TEM', 'CCTP', 'Client', 'Créateur',
     'Date remise', 'Indice', 'Nb Points', 'Montant (€)', 'ROP', 'ROP corr.', 'Marge pot. (€)',
-    'Statut', 'N° Commande', 'Date début', 'Date fin', 'N° PV', 'Montant réc. (€)',
-    'Reste à faire (€)', 'Âge (j)', 'Commentaire',
+    'Nb Heures vendues', 'Statut', 'N° Commande', 'Date début', 'Date fin', 'N° PV',
+    'Montant réc. (€)', 'Reste à faire (€)', 'Âge (j)', 'Commentaire',
   ];
 
   const rows = devis.map((d) => {
@@ -79,6 +79,7 @@ export async function GET(request: NextRequest) {
       d.rop ? d.rop.toFixed(4) : '',
       ropCorr ? ropCorr.toFixed(4) : '',
       margePot ? margePot.toFixed(2) : '',
+      d.nombreHeures ? String(d.nombreHeures) : '',
       STATUTS[d.statut] ?? d.statut,
       d.numeroCommande ?? '',
       fmt(d.dateDebut),

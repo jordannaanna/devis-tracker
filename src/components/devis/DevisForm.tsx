@@ -48,6 +48,7 @@ export default function DevisForm({ initial, mode }: Props) {
     dateFin: formatDateInput(initial?.dateFin),
     numeroPvReception: initial?.numeroPvReception ?? '',
     montantReceptionne: initial?.montantReceptionne ? String(initial.montantReceptionne) : '',
+    nombreHeures: initial?.nombreHeures ? String(initial.nombreHeures) : '',
     commentaire: initial?.commentaire ?? '',
   });
 
@@ -164,6 +165,9 @@ export default function DevisForm({ initial, mode }: Props) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Field label="Montant (€)" required>
             <input type="number" className="input" value={form.montant} onChange={set('montant')} step="0.01" min="0" placeholder="ex: 25000" />
+          </Field>
+          <Field label="Nombre d'heures vendues">
+            <input type="number" className="input" value={form.nombreHeures} onChange={set('nombreHeures')} step="0.5" min="0" placeholder="ex: 120" />
           </Field>
           <Field label="ROP (décimal, ex: 0.06 = 6%)">
             <input type="number" className="input" value={form.rop} onChange={set('rop')} step="0.001" min="0" max="1" placeholder="ex: 0.06" />

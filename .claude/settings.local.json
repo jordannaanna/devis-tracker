@@ -16,7 +16,11 @@
       "Bash(node_modules/.bin/prisma db:*)",
       "Bash(/Users/jordan/Desktop/appli/.env:*)",
       "Bash(node_modules/.bin/tsx prisma/seed.ts)",
-      "Bash(curl -s -X POST http://localhost:3000/api/auth/login -H \"Content-Type: application/json\" -d '{\"\"login\"\":\"\"admin\"\",\"\"password\"\":\"\"admin123\"\"}')"
+      "Bash(curl -s -X POST http://localhost:3000/api/auth/login -H \"Content-Type: application/json\" -d '{\"\"login\"\":\"\"admin\"\",\"\"password\"\":\"\"admin123\"\"}')",
+      "Bash(npx prisma:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }

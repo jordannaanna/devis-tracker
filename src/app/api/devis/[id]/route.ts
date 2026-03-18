@@ -59,6 +59,7 @@ export async function PUT(
         dateFin: body.dateFin ? new Date(body.dateFin) : null,
         numeroPvReception: body.numeroPvReception || null,
         montantReceptionne: body.montantReceptionne ? parseFloat(body.montantReceptionne) : null,
+        nombreHeures: body.nombreHeures ? parseFloat(body.nombreHeures) : null,
         commentaire: body.commentaire || null,
       },
     });
