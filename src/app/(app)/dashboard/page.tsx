@@ -82,9 +82,8 @@ export default async function DashboardPage({ searchParams }: { searchParams: Se
       <div>
         <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Performance</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
-          <KpiCard label="Taux de décision" value={formatPourcent(kpi.tauxDecision)} sub={`${kpi.nbDecides}/${kpi.nbOffres}`} />
-          <KpiCard label="Taux de gain (nb)" value={formatPourcent(kpi.tauxGainNb)} color="green" sub={`${kpi.nbGagne}/${kpi.nbDecides}`} />
-          <KpiCard label="Taux de gain (val)" value={formatPourcent(kpi.tauxGainVal)} color="green" />
+          <KpiCard label="Close Rate" value={formatPourcent(kpi.tauxGainNb)} color="green" sub={`${kpi.nbGagne}/${kpi.nbDecides} décidées`} />
+          <KpiCard label="Win Rate" value={formatPourcent(kpi.tauxGainVal)} color="green" sub={`sur montants décidés`} />
           <KpiCard label="ROP moyen" value={formatPourcent(kpi.ropMoyen)} color="blue" />
           <KpiCard label="Marge pot. consolidée" value={formatMontant(kpi.margePotConsolidee)} color="purple" />
         </div>
